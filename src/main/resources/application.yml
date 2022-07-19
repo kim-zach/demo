@@ -1,0 +1,22 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+#  application:
+#    name: springfox-swagger
+#  thymeleaf:
+#    cache: false
+#    encoding: UTF-8
+#    mode: HTML
+#    servlet:
+#      content-type: text/html
+
+server:
+  port: 8081
+# ===== 自定义swagger配置 ===== #
+swagger:
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger 3.0整合Demo
+  try-host: http://localhost:${server.port}
