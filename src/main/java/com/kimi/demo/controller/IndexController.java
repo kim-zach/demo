@@ -29,6 +29,11 @@ public class IndexController {
         return "index";//与templates中index.html对应
     }
 
+    @RequestMapping({"/login"})
+    public String login(){
+        return "/login";
+    }
+
 //    /**
 //     * 管理员/普通用户登陆
 //     *

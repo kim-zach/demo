@@ -1,6 +1,8 @@
 package com.kimi.demo.aop;
 
 
+import com.kimi.demo.result.R;
+import com.kimi.demo.utils.JwtUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -43,11 +45,18 @@ public class LoginCheck {
 //        return joinPoint.proceed();
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String requestURL = request.getRequestURL().toString();
+        logger.info("requestURL:{}",requestURL);
+        if("http://localhost:8081/aopController/login".equals(requestURL)){
+            return joinPoint.proceed();
+        }
         String token = request.getHeader("token");
-        String token1 = (String)request.getSession().getAttribute("token");
-        if(token == null || token != token1 ) {
+//        String token1 = (String)request.getSession().getAttribute("token");
+
+        if(token == null || !JwtUtils.checkToken(token)) {
             logger.info("未登录");
-            return "/login";
+//            return R.error().getMessage();
+            return R.error().message("未登录");
         }
         logger.info("token: " + token);
         return joinPoint.proceed();

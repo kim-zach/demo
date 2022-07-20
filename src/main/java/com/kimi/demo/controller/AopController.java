@@ -1,5 +1,6 @@
 package com.kimi.demo.controller;
 
+import com.kimi.demo.result.R;
 import com.kimi.demo.service.UserService;
 import com.kimi.demo.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -20,22 +21,23 @@ public class AopController {
     private UserService userService;
 
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
-    public String sayHello(String name){
-        return "hello" + name;
+    public R sayHello(String name){
+        return R.ok().message("hello");
     }
 
 
     @RequestMapping(value = "/weblog", method = RequestMethod.GET)
-    public String weblog(String name){
-        return "hello" + name;
+    public R weblog(String name){
+        return R.ok().data("name",name);
     }
 
 
     @PostMapping("/login")
-    public void login(@PathParam("userName") String userName , @PathParam("password") String password, HttpServletRequest request, HttpServletResponse response){
+    public R login(@PathParam("userName") String userName , @PathParam("password") String password, HttpServletRequest request, HttpServletResponse response){
 
         String token = JwtUtils.createToken(1l, userName);
         log.info("token :{}" , token);
+        return R.ok().data("token",token ) ;
     }
 
 
