@@ -25,24 +25,13 @@ public class LoginCheck {
 
     private static Logger logger = LogManager.getLogger(LoginCheck.class.getName());
 
-    @Pointcut("within(com.kimi.demo.controller..*)&&!within(com.kimi.demo.controller.IndexController)")
+    @Pointcut("within(com.kimi.demo.controller..*)")
     // IndexController中写了登录方法
     public void login() {
     }
 
     @Around("login()")
     public Object auth(ProceedingJoinPoint joinPoint) throws Throwable {
-        // 获取session中的用户信息
-//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-//        String username = (String) request.getSession().getAttribute("username");
-//
-//        if (username == null) {
-//            logger.info("未登录");
-////            return new ModelAndView("redirect:/login");
-//            return "/login";
-//        }
-//        logger.info("username: " + username);
-//        return joinPoint.proceed();
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestURL = request.getRequestURL().toString();
@@ -51,11 +40,9 @@ public class LoginCheck {
             return joinPoint.proceed();
         }
         String token = request.getHeader("token");
-//        String token1 = (String)request.getSession().getAttribute("token");
 
         if(token == null || !JwtUtils.checkToken(token)) {
             logger.info("未登录");
-//            return R.error().getMessage();
             return R.error().message("未登录");
         }
         logger.info("token: " + token);
